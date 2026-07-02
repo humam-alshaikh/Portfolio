@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Humam Abuualshaikh - Computational & Simulation Engineer</title>
+<meta name="description" content="Mechanical engineer working in finite element analysis, model order reduction, and scientific computing. Research and industry experience at Robert Bosch." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  :root{
+    /* surfaces — cool charcoal, not pure black */
+    --bg:#0a0d14;
+    --bg-soft:#0d1119;
+    --surface:#121622;
+    --surface-2:#19202f;
+    --border:#222a3b;
+    --border-lit:#33405a;
+
+    /* ink */
+    --text:#e8ecf4;
+    --text-dim:#9aa4ba;
+    --text-mute:#646e86;
+
+    /* UI action — single teal, used sparingly */
+    --teal:#2dd4bf;
+    --teal-soft:rgba(45,212,191,.12);
+    --teal-line:rgba(45,212,191,.35);
+
+    /* DATA colormap (viridis, from his stress plots) — reserved for visualization */
+    --v-lo:#46327e;   /* low / worst  (Guyan)  */
+    --v-mid:#2a9d8f;  /* mid          (Craig-Bampton) */
+    --v-hi:#a3e635;   /* high / best  (Free-Interface) */
+    --viridis:linear-gradient(180deg,#fde725 0%,#7ad151 22%,#2a9d8f 50%,#3b528b 76%,#440154 100%);
+    --viridis-h:linear-gradient(90deg,#440154 0%,#3b528b 26%,#2a9d8f 52%,#7ad151 80%,#fde725 100%);
+
+    --font-disp:'Space Grotesk',system-ui,sans-serif;
+    --font-body:'IBM Plex Sans',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+    --maxw:1160px;
+    --nav-h:62px;
+  }
+
+  html{scroll-behavior:smooth;font-size:16px}
+  body{
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--teal);color:#04110e}
+  a{color:inherit;text-decoration:none}
+
+  /* scroll progress */
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--teal);z-index:200;transition:width .1s linear}
+
+  /* ───────── NAV ───────── */
+  .nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:120;
+    background:rgba(10,13,20,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border)}
+  .nav-in{height:100%;max-width:var(--maxw);margin:0 auto;padding:0 2rem;
+    display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:.6rem;font-family:var(--font-disp);font-weight:700;
+    font-size:1.05rem;letter-spacing:-.01em;color:var(--text)}
+  .brand .mark{width:26px;height:26px;flex:none}
+  .nav-links{display:flex;gap:1.9rem;list-style:none}
+  .nav-links a{font-family:var(--font-mono);font-size:.76rem;color:var(--text-mute);
+    letter-spacing:.02em;transition:color .2s;position:relative}
+  .nav-links a::after{content:'';position:absolute;left:0;right:100%;bottom:-6px;height:1px;
+    background:var(--teal);transition:right .25s}
+  .nav-links a:hover,.nav-links a.active{color:var(--text)}
+  .nav-links a.active::after{right:0}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
+  .burger span{width:22px;height:2px;background:var(--text);transition:.25s}
+
+  /* ───────── LAYOUT PRIMITIVES ───────── */
+  .section{max-width:var(--maxw);margin:0 auto;padding:6rem 2rem}
+  .eyebrow{display:flex;align-items:center;gap:.7rem;font-family:var(--font-mono);
+    font-size:.74rem;color:var(--teal);letter-spacing:.08em;text-transform:lowercase;margin-bottom:1.1rem}
+  .eyebrow::before{content:'';width:26px;height:1px;background:var(--teal-line)}
+  .h2{font-family:var(--font-disp);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.4rem);
+    letter-spacing:-.025em;color:var(--text);line-height:1.1;margin-bottom:.9rem}
+  .lead{color:var(--text-dim);max-width:640px;font-size:1.02rem;margin-bottom:3rem}
+
+  /* registration ticks (CAD corner marks) for feature cards */
+  .ticked{position:relative}
+  .ticked::before,.ticked::after{content:'';position:absolute;width:9px;height:9px;
+    border-color:var(--border-lit);opacity:.9;pointer-events:none}
+  .ticked::before{top:10px;left:10px;border-top:1px solid;border-left:1px solid}
+  .ticked::after{bottom:10px;right:10px;border-bottom:1px solid;border-right:1px solid}
+
+  /* ───────── HERO ───────── */
+  .hero{position:relative;min-height:calc(100vh - var(--nav-h));display:flex;align-items:center;
+    padding:calc(var(--nav-h) + 3rem) 2rem 4rem;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 78% 38%, rgba(42,157,143,.10), transparent 70%),
+      radial-gradient(50% 45% at 12% 70%, rgba(70,50,126,.12), transparent 70%)}
+  .hero-rule{position:absolute;inset:0;opacity:.4;pointer-events:none;
+    background-image:linear-gradient(var(--border) 1px,transparent 1px),
+                     linear-gradient(90deg,var(--border) 1px,transparent 1px);
+    background-size:54px 54px;
+    -webkit-mask-image:radial-gradient(70% 60% at 50% 45%,#000 10%,transparent 100%);
+            mask-image:radial-gradient(70% 60% at 50% 45%,#000 10%,transparent 100%)}
+  .hero-in{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%;
+    display:grid;grid-template-columns:1.05fr .95fr;gap:3.5rem;align-items:center}
+
+  .tag{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-mono);font-size:.76rem;
+    color:var(--text-dim);border:1px solid var(--border-lit);border-radius:999px;
+    padding:.34rem .9rem;margin-bottom:1.6rem}
+  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+  .hero h1{font-family:var(--font-disp);font-weight:700;letter-spacing:-.035em;line-height:1.02;
+    font-size:clamp(2.7rem,6.2vw,4.4rem);color:var(--text);margin-bottom:.5rem}
+  .hero h1 .ln2{color:var(--text-dim)}
+  .role{font-family:var(--font-mono);font-size:.92rem;color:var(--teal);margin-bottom:1.4rem;letter-spacing:.01em}
+  .hero p.intro{color:var(--text-dim);font-size:1.06rem;max-width:520px;margin-bottom:1.9rem}
+
+  /* solver telemetry panel — replaces generic stat row */
+  .telemetry{font-family:var(--font-mono);font-size:.8rem;background:var(--bg-soft);
+    border:1px solid var(--border);border-radius:12px;padding:1rem 1.15rem;margin-bottom:1.9rem;
+    max-width:430px;line-height:1.9}
+  .telemetry .tl{display:flex;gap:1rem;white-space:nowrap}
+  .telemetry .k{color:var(--text-mute);width:74px;flex:none}
+  .telemetry .v{color:var(--text)}
+  .telemetry .accent{color:var(--teal)}
+  .telemetry .delta{color:var(--v-hi)}
+  .telemetry .ok{color:var(--v-hi)}
+  .telemetry .prompt{color:var(--text-mute)}
+
+  .cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.7rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:500;
+    padding:.68rem 1.4rem;border-radius:9px;border:1px solid transparent;cursor:pointer;transition:.2s;font-family:var(--font-body)}
+  .btn-fill{background:var(--teal);color:#04110e;font-weight:600}
+  .btn-fill:hover{background:#5ce0d0;transform:translateY(-1px)}
+  .btn-ghost{border-color:var(--border-lit);color:var(--text-dim)}
+  .btn-ghost:hover{border-color:var(--teal-line);color:var(--text)}
+
+  .contact-row{display:flex;gap:1.6rem;flex-wrap:wrap;font-size:.84rem;color:var(--text-mute);font-family:var(--font-mono)}
+  .contact-row a,.contact-row span{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-mute);transition:color .2s}
+  .contact-row a:hover{color:var(--teal)}
+  .contact-row svg{width:14px;height:14px;stroke:currentColor}
+
+  /* ── FEA mesh figure (the signature) ── */
+  .fea{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    padding:1rem 1rem .8rem;box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+  .fea-head{display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--font-mono);font-size:.72rem;color:var(--text-mute);margin-bottom:.6rem;padding:0 .2rem}
+  .fea-head .live{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-dim)}
+  .fea-head .live i{width:6px;height:6px;border-radius:50%;background:var(--v-hi);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .fea-stage{display:flex;gap:.6rem}
+  .fea-canvas-wrap{flex:1;position:relative;border-radius:8px;overflow:hidden;background:#070a10}
+  #mesh{display:block;width:100%;height:330px}
+  .fea-axes{position:absolute;left:8px;bottom:6px;font-family:var(--font-mono);font-size:.62rem;color:var(--text-mute)}
+  .cbar{width:14px;border-radius:4px;background:var(--viridis);flex:none;position:relative;margin:2px 0 16px}
+  .cbar-lab{position:absolute;left:20px;font-family:var(--font-mono);font-size:.6rem;color:var(--text-mute);white-space:nowrap}
+  .cbar-lab.top{top:-2px}.cbar-lab.bot{bottom:-2px}.cbar-lab.mid{top:48%}
+  .fea-foot{display:flex;justify-content:space-between;font-family:var(--font-mono);
+    font-size:.66rem;color:var(--text-mute);margin-top:.55rem;padding:0 .2rem}
+
+  /* ───────── SUMMARY ───────── */
+  .summary{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.4rem 2.4rem}
+  .summary p{font-size:1.06rem;line-height:1.85;color:var(--text)}
+  .summary .em{color:var(--teal);font-weight:500}
+  .summary .num{font-family:var(--font-mono);color:var(--v-hi);font-weight:500}
+
+  /* ───────── FOCUS ───────── */
+  .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:1.1rem}
+  .focus{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.5rem;
+    transition:transform .25s,border-color .25s}
+  .focus:hover{transform:translateY(-3px);border-color:var(--border-lit)}
+  .focus .ic{width:38px;height:38px;border-radius:9px;background:var(--teal-soft);
+    display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+  .focus .ic svg{width:19px;height:19px;stroke:var(--teal)}
+  .focus h3{font-family:var(--font-disp);font-weight:600;font-size:1rem;margin-bottom:.4rem;color:var(--text)}
+  .focus p{font-size:.86rem;color:var(--text-dim);line-height:1.6}
+  .focus p span{color: var(--teal);font-weight: 600;}
+  .focus p span.num{font-family: var(--font-mono);color: var(--text-dim);font-weight: 500;}
+
+  /* ───────── SKILLS ───────── */
+  .skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.3rem}
+  .skill-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.6rem}
+  .skill-card h3{font-family:var(--font-mono);font-size:.82rem;color:var(--text-dim);margin-bottom:1.1rem;
+    display:flex;align-items:center;gap:.5rem;text-transform:uppercase;letter-spacing:.04em}
+  .skill-card h3 svg{width:15px;height:15px;stroke:var(--teal)}
+  .chip{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;padding:.34rem .7rem;margin:.22rem .2rem;
+    border-radius:7px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);transition:.2s}
+  .chip:hover{border-color:var(--teal-line)}
+  .lvl{font-family:var(--font-mono);font-size:.62rem;padding:.1rem .35rem;border-radius:4px;
+    background:rgba(163,230,53,.13);color:var(--v-hi)}
+  .lvl.good{background:rgba(250,204,21,.12);color:#facc15}
+
+  /* ───────── EXPERIENCE ───────── */
+  .tl{position:relative;padding-left:1.9rem}
+  .tl::before{content:'';position:absolute;left:6px;top:10px;bottom:10px;width:1px;
+    background:linear-gradient(180deg,var(--teal),transparent)}
+  .tl-item{position:relative;margin-bottom:2.6rem}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-item::before{content:'';position:absolute;left:calc(-1.9rem + 1px);top:7px;width:12px;height:12px;
+    border-radius:3px;background:var(--bg);border:1.5px solid var(--teal);transform:rotate(45deg)}
+  .tl-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem 1rem;margin-bottom:.7rem}
+  .tl-co{font-family:var(--font-disp);font-weight:600;font-size:1.12rem;color:var(--text)}
+  .tl-role{font-size:.92rem;color:var(--teal)}
+  .tl-meta{font-family:var(--font-mono);font-size:.74rem;color:var(--text-mute);margin-left:auto}
+  .tl-list{list-style:none}
+  .tl-list li{position:relative;padding-left:1.3rem;font-size:.9rem;color:var(--text-dim);margin-bottom:.45rem;line-height:1.6}
+  .tl-list li::before{content:'';position:absolute;left:0;top:.62em;width:5px;height:1px;background:var(--teal)}
+  .tl-list strong{color:var(--text);font-weight:600}
+
+  /* ───────── PROJECTS ───────── */
+  .proj{background:var(--surface);border:1px solid var(--border);border-radius:18px;
+    padding:2rem;margin-bottom:1.6rem;transition:border-color .3s}
+  .proj:hover{border-color:var(--border-lit)}
+  .proj-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;align-items:flex-start;margin-bottom:.3rem}
+  .proj h3{font-family:var(--font-disp);font-weight:600;font-size:1.22rem;color:var(--text);max-width:34ch}
+  .proj .affil{font-family:var(--font-mono);font-size:.74rem;color:var(--text-mute)}
+  .proj .pill{font-family:var(--font-mono);font-size:.68rem;color:var(--text-dim);
+    border:1px solid var(--border-lit);border-radius:999px;padding:.25rem .7rem;white-space:nowrap}
+  .blk{margin-top:1.3rem}
+  .blk h4{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--teal);margin-bottom:.4rem}
+  .blk p{font-size:.91rem;color:var(--text-dim);line-height:1.65}
+  .blk ul{list-style:none}
+  .blk ul li{position:relative;padding-left:1.1rem;font-size:.9rem;color:var(--text-dim);margin-bottom:.35rem;line-height:1.6}
+  .blk ul li::before{content:'';position:absolute;left:0;top:.6em;width:5px;height:1px;background:var(--teal)}
+  .skills-line{font-size:.9rem;color:var(--text-dim)}
+  .skills-line b{color:var(--text);font-weight:500}
+
+  /* metric chips */
+  .mrow{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+  .metric{font-family:var(--font-mono);font-size:.74rem;padding:.4rem .8rem;border-radius:8px;
+    background:var(--bg-soft);border:1px solid var(--border);color:var(--text-dim)}
+  .metric b{color:var(--text);font-weight:500}
+
+  /* ── data viz inside MOR project ── */
+  .viz{background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.4rem;margin-top:1rem}
+  .viz-cap{font-family:var(--font-mono);font-size:.72rem;color:var(--text-mute);margin-bottom:1rem;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+  /* horizontal bars */
+  .hbar{display:grid;grid-template-columns:130px 1fr 58px;align-items:center;gap:.8rem;margin-bottom:.7rem}
+  .hbar:last-child{margin-bottom:0}
+  .hbar .hlabel{font-family:var(--font-mono);font-size:.76rem;color:var(--text-dim)}
+  .hbar .htrack{height:13px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+  .hbar .hfill{height:100%;width:0;border-radius:4px;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+  .hbar .hval{font-family:var(--font-mono);font-size:.78rem;color:var(--text);text-align:right}
+
+  /* grouped vertical bars (FRF) */
+  .gbars{display:flex;gap:1.6rem;align-items:flex-end;height:180px;padding-top:.4rem;
+    border-bottom:1px solid var(--border);margin-bottom:.6rem;position:relative}
+  .ggrid{position:absolute;left:0;right:0;height:1px;background:var(--border)}
+  .ggroup{flex:1;display:flex;gap:.4rem;align-items:flex-end;justify-content:center;height:100%}
+  .vbar{width:26%;max-width:30px;background:var(--c);height:0;border-radius:4px 4px 0 0;transition:height 1.1s cubic-bezier(.2,.7,.2,1);position:relative}
+  .vbar span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);
+    font-family:var(--font-mono);font-size:.64rem;color:var(--text-dim);opacity:0;transition:opacity .4s .9s}
+  .gbars.in .vbar span{opacity:1}
+  .glabels{display:flex;gap:1.6rem}
+  .glabels div{flex:1;text-align:center;font-family:var(--font-mono);font-size:.72rem;color:var(--text-mute)}
+  .legend{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:.9rem;font-family:var(--font-mono);font-size:.72rem;color:var(--text-dim)}
+  .legend span{display:inline-flex;align-items:center;gap:.4rem}
+  .legend i{width:10px;height:10px;border-radius:3px}
+
+  /* DOF reduction bar */
+  .dof{margin-top:1rem;font-family:var(--font-mono)}
+  .dof-row{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:.8rem;margin-bottom:.55rem}
+  .dof-row .dl{font-size:.74rem;color:var(--text-dim)}
+  .dof-track{height:11px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+  .dof-fill{height:100%;width:0;border-radius:4px;transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+  .dof-val{font-size:.74rem;color:var(--text)}
+  .dof-note{font-family:var(--font-mono);font-size:.74rem;color:var(--v-hi);margin-top:.2rem}
+
+  /* ───────── EDUCATION ───────── */
+  .edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(264px,1fr));gap:1.1rem;margin-bottom:1.4rem}
+  .edu{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.5rem;transition:border-color .25s}
+  .edu:hover{border-color:var(--border-lit)}
+  .edu-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem}
+  .cc{font-family:var(--font-mono);font-size:.66rem;color:var(--teal);border:1px solid var(--teal-line);
+    border-radius:5px;padding:.15rem .4rem;letter-spacing:.05em}
+  .edu h3{font-family:var(--font-disp);font-weight:600;font-size:1rem;color:var(--text);margin-bottom:.25rem;line-height:1.25}
+  .edu .deg{font-size:.86rem;color:var(--teal);margin-bottom:.3rem}
+  .edu .dates{font-family:var(--font-mono);font-size:.72rem;color:var(--text-mute);margin-bottom:.5rem}
+  .edu p{font-size:.83rem;color:var(--text-dim);line-height:1.55}
+  .edu .note{font-style:italic;color:var(--text-mute);margin-top:.4rem;font-size:.8rem}
+  .edu-foot{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.5rem 1.8rem}
+  .edu-foot p{color:var(--text-dim);font-size:.95rem}
+
+  /* ───────── LANGUAGES ───────── */
+  .langs{display:flex;gap:1rem;flex-wrap:wrap}
+  .lang{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.2rem 1.9rem;min-width:165px;
+    transition:border-color .25s}
+  .lang:hover{border-color:var(--border-lit)}
+  .lang .ln{font-family:var(--font-disp);font-weight:600;font-size:1.02rem;color:var(--text);margin-bottom:.2rem}
+  .lang .lv{font-size:.8rem;color:var(--text-dim)}
+  .lang .meter{display:flex;gap:3px;margin-top:.6rem}
+  .lang .meter i{height:4px;width:18px;border-radius:2px;background:var(--surface-2)}
+  .lang .meter i.on{background:var(--teal)}
+
+  /* ───────── CONTACT / FOOTER ───────── */
+  .contact-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;
+    padding:3rem 2.4rem;text-align:center;max-width:640px;margin:0 auto}
+  .contact-card p.k{color:var(--text-dim);margin-bottom:1.8rem;font-size:1.02rem}
+  .contact-card .btn{margin:.3rem}
+  .contact-card .foot-line{font-family:var(--font-mono);font-size:.8rem;color:var(--text-mute);margin-top:1.4rem;
+    display:inline-flex;align-items:center;gap:.5rem}
+  .contact-card .foot-line svg{width:14px;height:14px;stroke:currentColor}
+  footer{border-top:1px solid var(--border);text-align:center;padding:2.4rem 2rem;
+    font-family:var(--font-mono);font-size:.75rem;color:var(--text-mute)}
+  footer span{color:var(--teal)}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+  .rv.in{opacity:1;transform:none}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+  /* ───────── RESPONSIVE ───────── */
+  @media (max-width:920px){
+    .hero-in{grid-template-columns:1fr;gap:2.4rem}
+    .fea{order:2}
+  }
+  @media (max-width:760px){
+    .nav-links{position:absolute;top:var(--nav-h);left:0;right:0;flex-direction:column;gap:1.1rem;
+      background:rgba(10,13,20,.97);padding:1.4rem 2rem;border-bottom:1px solid var(--border);
+      transform:translateY(-150%);transition:transform .3s;pointer-events:none}
+    .nav-links.open{transform:none;pointer-events:auto}
+    .burger{display:flex}
+    .section{padding:4rem 1.25rem}
+    .hero{padding:calc(var(--nav-h) + 2rem) 1.25rem 3rem}
+    .summary,.proj,.contact-card,.edu-foot{padding:1.6rem}
+    .tl-meta{margin-left:0;width:100%}
+    #mesh{height:260px}
+    .hbar{grid-template-columns:96px 1fr 50px;gap:.5rem}
+    .telemetry{font-size:.72rem;padding:.85rem .9rem}
+    .telemetry .k{width:62px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-in">
+    <a href="#top" class="brand" aria-label="Humam Abuualshaikh — home">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="28" height="28" rx="6" stroke="#2dd4bf" stroke-width="1.5"/>
+        <path d="M9 22V10M9 16h8M17 22V10" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="23" cy="11" r="1.6" fill="#a3e635"/>
+      </svg>
+      Humam Abuualshaikh
+    </a>
+    <ul class="nav-links" id="links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#work">work</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-rule"></div>
+  <div class="hero-in">
+    <div>
+      <span class="tag"><span class="dot"></span>Mechanical · Simulation · Computational</span>
+      <h1>Humam<br><span class="ln2">Abuualshaikh</span></h1>
+      <div class="role">Finite element analysis · Model order reduction · Numerical mechanics</div>
+      <p class="intro">
+        I work on engineering simulation with ANSYS and Python, from finite element analysis 
+        and model order reduction to thermodynamic and numerical modeling.
+      </p>
+
+      <div class="telemetry" aria-label="Thesis solver summary">
+        <div class="tl"><span class="prompt">$</span><span class="v">&nbsp;solver --analysis modal</span></div>
+        <div class="tl"><span class="k">model</span><span class="v">Brake-Reuß beam</span></div>
+        <div class="tl"><span class="k">solver</span><span class="v">ANSYS Mechanical · <span class="accent">APDL</span></span></div>
+        <div class="tl"><span class="k">dof</span><span class="v">101,922 → 4,800&nbsp;&nbsp;<span class="delta">−95%</span></span></div>
+        <div class="tl"><span class="k">rms_err</span><span class="v"><span class="accent">1.02%</span> · Craig-Bampton</span></div>
+        <div class="tl"><span class="k">state</span><span class="v"><span class="ok">●</span> converged</span></div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#work" class="btn btn-fill">View selected work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+
+      <div class="contact-row">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Kassel, DE</span>
+        <a href="mailto:humamabu8@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-9 6-9-6"/></svg>humamabu8@gmail.com</a>
+        <a href="https://www.linkedin.com/in/humam-abuulashaikh" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
+      </div>
+    </div>
+
+    <!-- SIGNATURE: live FE beam mesh under self-weight, viridis stress field -->
+    <figure class="fea ticked" aria-label="Live finite element mesh of a beam deforming under self-weight, colored by stress">
+      <figcaption class="fea-head">
+        <span>σ gravity-loaded beam · Q4 mesh</span>
+        <span class="live"><i></i>solving</span>
+      </figcaption>
+      <div class="fea-stage">
+        <div class="fea-canvas-wrap">
+          <canvas id="mesh"></canvas>
+          <div class="fea-axes">e₁ →&nbsp;&nbsp;e₃ ↑</div>
+        </div>
+        <div class="cbar" aria-hidden="true">
+          <span class="cbar-lab top">+σ</span>
+          <span class="cbar-lab mid">0</span>
+          <span class="cbar-lab bot">−σ</span>
+        </div>
+      </div>
+      <div class="fea-foot">
+        <span>nodes 130 · elements 96</span>
+        <span>plane stress · 2×2 Gauss</span>
+      </div>
+    </figure>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="eyebrow rv">summary</div>
+  <h2 class="h2 rv">Mechanical Engineering and Simulation</h2>
+  <div class="summary rv">
+    <p>
+      I studied Mechanical Engineering at the <span class="em">German Jordanian University</span>, where I collected research
+      and practical experience in <span class="em">Germany, Austria, and Jordan</span>. At Robert Bosch I completed a
+      bachelor's thesis comparing model order reduction methods in ANSYS Mechanical, that enabled us to reduce the model from
+      <span class="num">101,922-DOF</span> to approximately <span class="num">4,800 DOFs</span> while maintaining only
+      <span class="num">1%</span> eigenfrequency error. During my research internship, I developed a thermodynamic model
+      to study liquid-water formation at the anode inlet of a passive hydrogen fuel cell. In my bachelor's thesis  I took 
+      a different path, and focused on finite element analysis and numerical methods. Throughout my studies and internship, 
+      I learned how to work with scientific programming using <span class="em">Python, MATLAB, and C/C++</span>. 
+      At the end of my degree, I further specialized through elective courses in structural dynamics, thermodynamics and fluid mechanics.
+      Before transitioning to mechanical engineering, I studied mathematics and physics, with (<span class="num">93.25%</span> GPA).
+    </p>
+  </div>
+</section>
+
+<!-- FOCUS -->
+<section class="section" id="focus" style="padding-top:0">
+  <div class="eyebrow rv">focus areas</div>
+  <h2 class="h2 rv">What I work on</h2>
+  <div class="focus-grid">
+    <div class="focus rv">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M9 20v-5h6v5"/></svg></div>
+      <h3>Structural dynamics &amp; MOR</h3>
+      <p>Reducing large FE models with Guyan, Craig-Bampton, and free-interface CMS while preserving vibration behavior.</p>
+    </div>
+    <div class="focus rv">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+      <h3>Finite element analysis</h3>
+      <p>Developing finite element models in <span>ANSYS Mechanical</span> with <span>APDL</span> scripting to study structural behavior and dynamic response.</p>
+    </div>
+    <div class="focus rv">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <h3>Numerical methods</h3>
+      <p>Developing a <span class="num">2D</span> finite element solver that formulates <span class="num">Q4</span> elements, computes stress fields, and verifies the results against <span>Euler–Bernoulli</span> beam theory.</p>
+    </div>
+    <div class="focus rv">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v6m-7 8h2m12 0h2M9 8l3 3 3-3"/><circle cx="12" cy="17" r="5"/></svg></div>
+      <h3>Clean-energy systems</h3>
+      <p>Developing thermodynamic models to analyze hydrogen fuel-cell flow and liquid-water formation using experimental data.</p>
+    </div>
+    <div class="focus rv">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <h3>Scientific programming</h3>
+      <p>Python for engineering simulation, experimental data processing, and computer vision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+  <div class="eyebrow rv">capabilities</div>
+  <h2 class="h2 rv">Technical skills</h2>
+  <div class="skill-grid">
+    <div class="skill-card rv">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>Simulation &amp; analysis</h3>
+      <span class="chip">FEA &amp; CAE</span>
+      <span class="chip">ANSYS Mechanical<span class="lvl">very good</span></span>
+      <span class="chip">ANSYS APDL<span class="lvl">very good</span></span>
+      <span class="chip">Model order reduction</span>
+      <span class="chip">Modal analysis</span>
+      <span class="chip">MAC &amp; FRF</span>
+      <span class="chip">Q4 isoparametric FE</span>
+      <span class="chip">Gauss quadrature</span>
+      <span class="chip">Thermodynamics</span>
+      <span class="chip">Aerodynamics</span>
+      <span class="chip">Compressible flow</span>
+    </div>
+    <div class="skill-card rv">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Programming &amp; data</h3>
+      <span class="chip">Python<span class="lvl">very good</span></span>
+      <span class="chip">NumPy</span><span class="chip">SciPy</span><span class="chip">OpenCV</span>
+      <span class="chip">CoolProp</span><span class="chip">pandas</span><span class="chip">matplotlib</span>
+      <span class="chip">MATLAB<span class="lvl">very good</span></span>
+      <span class="chip">C / C++<span class="lvl good">good</span></span>
+      <span class="chip">SIFT · FLANN · RANSAC</span>
+      <span class="chip">Numerical optimization</span>
+      <span class="chip">Sensor-data sync</span>
+    </div>
+    <div class="skill-card rv">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>CAD &amp; tools</h3>
+      <span class="chip">SolidWorks<span class="lvl">very good</span></span>
+      <span class="chip">ANSYS Mechanical<span class="lvl">very good</span></span>
+      <span class="chip">INCA<span class="lvl good">good</span></span>
+      <span class="chip">Microsoft 365<span class="lvl">very good</span></span>
+    </div>
+    <div class="skill-card rv">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Methods &amp; theory</h3>
+      <span class="chip">Reynolds Transport Theorem</span>
+      <span class="chip">Faraday's law</span>
+      <span class="chip">Euler–Bernoulli theory</span>
+      <span class="chip">Conservation laws</span>
+      <span class="chip">Plane-stress formulation</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="eyebrow rv">experience</div>
+  <h2 class="h2 rv">Where I've worked</h2>
+  <div class="tl">
+    <div class="tl-item rv">
+      <div class="tl-head">
+        <span class="tl-co">Robert Bosch GmbH</span>
+        <span class="tl-role">Bachelor's Thesis Student</span>
+        <span class="tl-meta">Renningen, DE · Apr 2025 – Mar 2026</span>
+      </div>
+      <ul class="tl-list">
+        <li>Compared three linear model order reduction methods (Guyan, Craig–Bampton, and Free-Interface CMS) against a full FE model of a Brake–Reuß beam, reducing <strong>101,922 DOFs to ~4,800</strong>.</li>
+        <li>Compared reduced-order models using modal, harmonic (FRF, 0–2,500 Hz), and transient analyses, to verify the accuracy against the full FE model: CMS holds <strong>~1% RMS error</strong> vs ~27% for Guyan, whose error grew to ~70% by the 20th mode.</li>
+        <li>Recommended the best method based on accuracy and computational cost.</li>
+      </ul>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-head">
+        <span class="tl-co">Robert Bosch GmbH</span>
+        <span class="tl-role">Intern — Fuel Cells</span>
+        <span class="tl-meta">Feuerbach, DE · 2025 (~22 weeks)</span>
+      </div>
+      <ul class="tl-list">
+        <li>Developed a <strong>Python thermodynamic model</strong> of liquid-water formation at a fuel-cell anode inlet of a hydrogen fuel cell, validated against experimental data.</li>
+        <li>Built a <strong>computer-vision pipeline</strong> (SIFT, FLANN and Lowe's ratio test) to automatically detect observation windows in experimental videos.</li>
+        <li>Developed Python models for compressible hydrogen flow and liquid-water formation. Using <strong>CoolProp.</strong>.</li>
+        <li>Computed gas composition using nonlinear least-squares optimization and Faraday's law.</li>
+      </ul>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-head">
+        <span class="tl-co">Royal Scientific Society (RSS)</span>
+        <span class="tl-role">Intern</span>
+        <span class="tl-meta">Amman, JO · Jun 2024 – Aug 2024</span>
+      </div>
+      <ul class="tl-list">
+        <li>Tested material samples (water pipes, traffic signs, reinforcement steel) for international standards.</li>
+        <li>Applied metallographic grain-structure analysis.</li>
+      </ul>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-head">
+        <span class="tl-co">Joanneum Racing Graz</span>
+        <span class="tl-role">Volunteer</span>
+        <span class="tl-meta">Graz, AT · Mar 2023 – Jun 2023</span>
+      </div>
+      <ul class="tl-list">
+        <li>Built chassis and body components for a Formula Student race car.</li>
+        <li>Worked with carbon-fiber composite materials and manufacturing processes.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- WORK / PROJECTS -->
+<section class="section" id="work">
+  <div class="eyebrow rv">selected work</div>
+  <h2 class="h2 rv">Projects &amp; research</h2>
+  <p class="lead rv">Three projects that show the full loop: formulating the model, implementing it, and validating the numbers.</p>
+
+  <!-- PROJECT 1 -->
+  <article class="proj rv ticked">
+    <div class="proj-top">
+      <div>
+        <h3>Comparative Study of Model Order Reduction Methods</h3>
+        <div class="affil">Bachelor's Graduation Project · GJU / Robert Bosch GmbH</div>
+      </div>
+      <span class="pill">structural dynamics</span>
+    </div>
+
+    <div class="blk">
+      <h4>Problem</h4>
+      <p>Full FE models of jointed structures often contain over 100,000 DOFs, making repeated dynamic analyses computationally expensive. The goal was to determine which linear model order reduction method best preserves structural dynamics at a fixed reduction level.</p>
+    </div>
+    <div class="blk">
+      <h4>Approach</h4>
+      <p>Implemented Guyan static condensation, Craig–Bampton fixed-interface CMS, and free-interface (Herting) CMS in ANSYS Mechanical. To ensure a fair comparison, all three methods used the same interface (793 master nodes across four interfaces) and the same reduction level (20 generalized coordinates). We checked the mesh convergence, and then the reduced models were evaluated using modal, harmonic (FRF, 0–2,500 Hz), and transient analyses.</p>
+    </div>
+    <div class="blk">
+      <h4>Tools</h4>
+      <p>ANSYS Mechanical · ANSYS APDL (automation, post-processing) · Python (MAC from directional nodal deformations).</p>
+    </div>
+
+    <div class="blk">
+      <h4>Results</h4>
+
+      <!-- chart: eigenfrequency RMS error -->
+      <div class="viz" data-viz="eig">
+        <div class="viz-cap"><span>RMS eigenfrequency error vs full FE model</span><span>lower = better</span></div>
+        <div class="hbar"><span class="hlabel">Guyan</span><div class="htrack"><div class="hfill" style="background:var(--v-lo)" data-w="100"></div></div><span class="hval">27.0%</span></div>
+        <div class="hbar"><span class="hlabel">Craig-Bampton</span><div class="htrack"><div class="hfill" style="background:var(--v-mid)" data-w="3.8"></div></div><span class="hval">1.02%</span></div>
+        <div class="hbar"><span class="hlabel">Free-Interface</span><div class="htrack"><div class="hfill" style="background:var(--v-hi)" data-w="3.7"></div></div><span class="hval">1.01%</span></div>
+      </div>
+
+      <!-- chart: complex FRF error grouped -->
+      <div class="viz" data-viz="frf">
+        <div class="viz-cap"><span>Complex FRF error (magnitude + phase)</span><span>0 = exact match</span></div>
+        <div class="gbars" id="frfbars">
+          <div class="ggrid" style="bottom:0"></div><div class="ggrid" style="bottom:25%"></div>
+          <div class="ggrid" style="bottom:50%"></div><div class="ggrid" style="bottom:75%"></div>
+          <div class="ggroup">
+            <div class="vbar" style="--c:var(--v-lo)" data-h="94"><span>.94</span></div>
+            <div class="vbar" style="--c:var(--v-mid)" data-h="55.4"><span>.55</span></div>
+            <div class="vbar" style="--c:var(--v-hi)" data-h="0.5"><span>0</span></div>
+          </div>
+          <div class="ggroup">
+            <div class="vbar" style="--c:var(--v-lo)" data-h="63.7"><span>.64</span></div>
+            <div class="vbar" style="--c:var(--v-mid)" data-h="38.2"><span>.38</span></div>
+            <div class="vbar" style="--c:var(--v-hi)" data-h="24.1"><span>.24</span></div>
+          </div>
+          <div class="ggroup">
+            <div class="vbar" style="--c:var(--v-lo)" data-h="42.9"><span>.43</span></div>
+            <div class="vbar" style="--c:var(--v-mid)" data-h="34.7"><span>.35</span></div>
+            <div class="vbar" style="--c:var(--v-hi)" data-h="13.2"><span>.13</span></div>
+          </div>
+        </div>
+        <div class="glabels"><div>Displacement</div><div>Velocity</div><div>Acceleration</div></div>
+        <div class="legend">
+          <span><i style="background:var(--v-lo)"></i>Guyan</span>
+          <span><i style="background:var(--v-mid)"></i>Craig-Bampton</span>
+          <span><i style="background:var(--v-hi)"></i>Free-Interface</span>
+        </div>
+      </div>
+
+      <!-- DOF reduction -->
+      <div class="viz dof" data-viz="dof">
+        <div class="viz-cap"><span>Model size reduction</span><span>20 modes retained</span></div>
+        <div class="dof-row"><span class="dl">Full FE</span><div class="dof-track"><div class="dof-fill" style="background:var(--v-lo)" data-w="100"></div></div><span class="dof-val">101,922</span></div>
+        <div class="dof-row"><span class="dl">Reduced</span><div class="dof-track"><div class="dof-fill" style="background:var(--v-hi)" data-w="4.7"></div></div><span class="dof-val">~4,800</span></div>
+        <div class="dof-note">≈ 95% fewer degrees of freedom · CMS error held near 1%</div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h4>Skills demonstrated</h4>
+      <p class="skills-line"><b>Structural dynamics &amp; CAE</b> · <b>ANSYS APDL automation</b> · <b>quantitative model validation</b></p>
+    </div>
+  </article>
+
+  <!-- PROJECT 2 -->
+  <article class="proj rv ticked">
+    <div class="proj-top">
+      <div>
+        <h3>Finite Element Solution of a Gravity-Loaded Beam Using Q4 Elements</h3>
+        <div class="affil">Numerical Mechanics I · University of Kassel (SS2025)</div>
+      </div>
+      <span class="pill">computational mechanics</span>
+    </div>
+
+    <div class="blk">
+      <h4>Problem</h4>
+      <p>Compute the deformation and stress distribution of a beam under self-weight using 2D finite element solver, then verify the results against Euler–Bernoulli beam theory.</p>
+    </div>
+    <div class="blk">
+      <h4>Approach</h4>
+      <p>Developed a 2D finite element solver from scratch using bilinear quadrilateral (Q4) elements. Implemented element formulation, Gauss integration, global stiffness assembly, gravity loading, and stress recovery. Generated structured meshes and evaluated both clamped–clamped and pinned–pinned beams with different slenderness ratios (L/H = 10 and 100) before validating the results against analytical beam theory.</p>
+    </div>
+    <div class="blk">
+      <h4>Tools</h4>
+      <p>Python · NumPy (mesh, assembly, linear solve) · pandas · matplotlib (stress visualization on the deformed mesh).</p>
+    </div>
+    <div class="blk">
+      <h4>Figure</h4>
+      <p>A = clamped–clamped beam, B = pinned–pinned beam. H = beam height (L/H = 10 and 100). Bars show the relative deflection error compared with Euler–Bernoulli beam theory (lower is better).</p>
+    </div>
+
+    <div class="blk">
+      <h4>Results - FE vs Euler–Bernoulli midspan deflection</h4>
+      <div class="viz" data-viz="val">
+        <div class="viz-cap"><span>Relative deflection error by case</span><span>within ~0.8–7%</span></div>
+        <div class="hbar"><span class="hlabel">A · H=0.10</span><div class="htrack"><div class="hfill" style="background:var(--v-lo)" data-w="100"></div></div><span class="hval">7.3%</span></div>
+        <div class="hbar"><span class="hlabel">B · H=0.10</span><div class="htrack"><div class="hfill" style="background:var(--v-hi)" data-w="11"></div></div><span class="hval">0.8%</span></div>
+        <div class="hbar"><span class="hlabel">A · H=0.01</span><div class="htrack"><div class="hfill" style="background:var(--v-mid)" data-w="37"></div></div><span class="hval">2.7%</span></div>
+        <div class="hbar"><span class="hlabel">B · H=0.01</span><div class="htrack"><div class="hfill" style="background:var(--v-mid)" data-w="38"></div></div><span class="hval">2.8%</span></div>
+      </div>
+      <div class="mrow">
+        <span class="metric">stiffness symmetry <b>‖K−Kᵀ‖∞ ≈ 1e-10</b></span>
+        <span class="metric">reactions <b>balance applied load</b></span>
+        <span class="metric"><b>Kff</b> positive-definite</span>
+      </div>
+    </div>
+
+    <div class="blk">
+      <h4>Skills demonstrated</h4>
+      <p class="skills-line"><b>FE theory &amp; implementation</b> · <b>numerical verification</b> · <b>scientific Python</b></p>
+    </div>
+  </article>
+
+  <!-- PROJECT 3 -->
+  <article class="proj rv ticked">
+    <div class="proj-top">
+      <div>
+        <h3>Tracing Gas Flow &amp; Thermal Characteristics via Aerodynamic Analysis</h3>
+        <div class="affil">Robert Bosch GmbH · Internship Report</div>
+      </div>
+      <span class="pill">thermo-fluids</span>
+    </div>
+
+    <div class="blk">
+      <h4>Problem</h4>
+      <p>Understand and predict liquid-water formation at the anode inlet of a passive hydrogen fuel cell under varying flow, pressure, and humidity conditions.</p>
+    </div>
+    <div class="blk">
+      <h4>Approach</h4>
+      <p>Developed a simplified 1D compressible-flow model based on the conservation laws. Computed Mach number, modeled contractions, expansions, and choked flow, then solved the downstream flow state from the continuity, momentum, and energy equations. Finally, predicted gas composition using Faraday's law and calculated the mixed-gas temperature.</p>
+    </div>
+    <div class="blk">
+      <h4>Tools</h4>
+      <p>Python · OpenCV · SciPy (<code>least_squares</code> / TRF) · CoolProp (IAPWS-95), with a computer-vision module (SIFT, FLANN, RANSAC homography) and a synchronization layer for multi-rate sensor data.</p>
+    </div>
+    <div class="blk">
+      <h4>Results</h4>
+      <ul>
+        <li>Worked on a computer vision pipeline that detects observation windows in experimental videos within milliseconds per frame.</li>
+        <li>Predicts downstream flow (velocity, pressure, temperature, Mach number), including choked cases.</li>
+        <li>Estimates gas concentration and condensation from measured data across cell stack.</li>
+        <li>Replaced an earlier two-experiment "delta" method with a single-pass nonlinear solve.</li>
+      </ul>
+      <div class="mrow">
+        <span class="metric"><b>335-cell</b> stack</span>
+        <span class="metric">SIFT · FLANN · RANSAC</span>
+        <span class="metric">Lowe's ratio <b>0.7</b></span>
+        <span class="metric">CoolProp · <b>IAPWS-95</b></span>
+      </div>
+    </div>
+    <div class="blk">
+      <h4>Skills demonstrated</h4>
+      <p class="skills-line"><b>Applied thermo-fluids</b> · <b>nonlinear solving</b> · <b>computer vision &amp; data handling</b></p>
+    </div>
+  </article>
+</section>
+
+<!-- EDUCATION -->
+<section class="section" id="education">
+  <div class="eyebrow rv">education</div>
+  <h2 class="h2 rv">Education &amp; global exposure</h2>
+  <p class="lead rv">Four institutions across three countries — different academic systems, languages, and engineering conventions.</p>
+  <div class="edu-grid">
+    <div class="edu rv">
+      <div class="edu-top"><div></div><span class="cc">JO</span></div>
+      <h3>German Jordanian University (GJU)</h3>
+      <div class="deg">B.Sc. Mechanical Engineering</div>
+      <div class="dates">Oct 2020 – Mar 2026 · Madaba</div>
+      <p>Focus: fluid mechanics, mechanical vibrations, thermodynamics.</p>
+    </div>
+    <div class="edu rv">
+      <div class="edu-top"><div></div><span class="cc">DE</span></div>
+      <h3>University of Kassel</h3>
+      <div class="deg">Exchange Student, Mechanical Engineering</div>
+      <div class="dates">Oct 2024 – Mar 2025 · Kassel</div>
+      <p>Studied Numerical Mechanics, Fluid Mechanics II, and Machine & Rotor Dynamics. Built a Q4 finite element solver as part of the Numerical Mechanics course.</p>
+    </div>
+    <div class="edu rv">
+      <div class="edu-top"><div></div><span class="cc">AT</span></div>
+      <h3>FH Joanneum</h3>
+      <div class="deg">Exchange Student</div>
+      <div class="dates">Feb 2023 – Jun 2023 · Graz</div>
+      <p>European exchange semester; Joanneum Racing volunteer.</p>
+    </div>
+    <div class="edu rv">
+      <div class="edu-top"><div></div><span class="cc">JO</span></div>
+      <h3>University of Jordan</h3>
+      <div class="deg">B.Sc. Mathematics &amp; Physics (not completed)</div>
+      <div class="dates">Feb 2019 – Jun 2020 · Amman</div>
+      <p>Real analysis, linear algebra, differential equations · GPA 93.25%.</p>
+      <p class="note">Foundation for the analytical and numerical side of the work.</p>
+    </div>
+  </div>
+  <div class="edu-foot rv">
+    <p>GJU's German-Jordanian curriculum, two European exchanges, and a year of industry research in Germany together reflect comfort working in international, multilingual engineering teams.</p>
+  </div>
+</section>
+
+<!-- LANGUAGES -->
+<section class="section" id="languages" style="padding-top:0">
+  <div class="eyebrow rv">languages</div>
+  <h2 class="h2 rv">Languages</h2>
+  <div class="langs">
+    <div class="lang rv">
+      <div class="ln">Arabic</div><div class="lv">Native</div>
+      <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    </div>
+    <div class="lang rv">
+      <div class="ln">English</div><div class="lv">Fluent · spoken &amp; written</div>
+      <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    </div>
+    <div class="lang rv">
+      <div class="ln">German</div><div class="lv">Very good · spoken &amp; written</div>
+      <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="eyebrow rv" style="justify-content:center">contact</div>
+  <h2 class="h2 rv" style="text-align:center">Let's talk</h2>
+  <div class="contact-card rv">
+    <p class="k">Open to roles in simulation/CAE, computational engineering, and R&amp;D — especially in automotive, energy, and clean-tech.</p>
+    <a href="mailto:humamabu8@gmail.com" class="btn btn-fill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-9 6-9-6"/></svg>
+      humamabu8@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/humam-abuulashaikh" target="_blank" rel="noopener" class="btn btn-ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <div class="foot-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      +49 160 5615839 · Kassel, Germany
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Humam Abuualshaikh · built by hand with <span>HTML · CSS · JS</span>
+</footer>
+
+<script>
+/* ---------- mobile menu ---------- */
+const burger = document.getElementById('burger');
+const links = document.getElementById('links');
+burger.addEventListener('click', () => links.classList.toggle('open'));
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+/* ---------- scroll progress ---------- */
+const prog = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, {passive:true});
+
+/* ---------- reveal on scroll ---------- */
+const io = new IntersectionObserver((es) => {
+  es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+}, {threshold:.14});
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ---------- animate charts when visible ---------- */
+const chartIO = new IntersectionObserver((es) => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const box = e.target;
+    box.querySelectorAll('.hfill,.dof-fill').forEach(f => f.style.width = f.dataset.w + '%');
+    box.querySelectorAll('.vbar').forEach(b => b.style.height = b.dataset.h + '%');
+    const g = box.querySelector('.gbars'); if (g) g.classList.add('in');
+    chartIO.unobserve(box);
+  });
+}, {threshold:.3});
+document.querySelectorAll('[data-viz]').forEach(el => chartIO.observe(el));
+
+/* ---------- active nav link ---------- */
+const secs = [...document.querySelectorAll('section[id]')];
+const navA = [...document.querySelectorAll('.nav-links a')];
+addEventListener('scroll', () => {
+  let cur = '';
+  for (const s of secs){ if (scrollY >= s.offsetTop - 130) cur = s.id; }
+  navA.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+}, {passive:true});
+
+/* ====================================================================
+   SIGNATURE — live FE beam mesh deforming under self-weight.
+   Cell colour = bending-stress proxy, mapped through the viridis
+   colormap (the same map used in the project's stress plots).
+==================================================================== */
+(function(){
+  const canvas = document.getElementById('mesh');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const NX = 25, NY = 5;                 // node grid (24 x 4 = 96 elements)
+  let W = 0, H = 0, dpr = 1, t = 0;
+  let base = [];                          // undeformed node positions
+
+  // viridis control points (r,g,b) at evenly spaced stops 0..1
+  const VIR = [[68,1,84],[72,33,115],[64,67,135],[52,94,141],[41,120,142],
+               [32,144,140],[34,167,132],[68,190,112],[121,209,81],[189,222,38],[253,231,37]];
+  function viridis(x){
+    x = x < 0 ? 0 : x > 1 ? 1 : x;
+    const s = x * (VIR.length - 1), i = Math.floor(s), f = s - i;
+    const a = VIR[i], b = VIR[Math.min(i+1, VIR.length-1)];
+    return `rgb(${a[0]+(b[0]-a[0])*f|0},${a[1]+(b[1]-a[1])*f|0},${a[2]+(b[2]-a[2])*f|0})`;
+  }
+
+  function layout(){
+    const r = canvas.getBoundingClientRect();
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const mx = W * 0.09, beamW = W - mx*2;
+    const beamH = H * 0.20, topY = H * 0.30;     // slender beam, room to sag below
+    base = [];
+    for (let j=0;j<NY;j++){
+      const row = [];
+      for (let i=0;i<NX;i++){
+        row.push({ x: mx + beamW*i/(NX-1), y: topY + beamH*j/(NY-1) });
+      }
+      base.push(row);
+    }
+    base.beamH = beamH;
+  }
+
+  // clamped-clamped sag shape, normalised to 1 at midspan
+  const shape  = s => 16*s*s*(1-s)*(1-s);
+  const shape2 = s => 32*(1 - 6*s + 6*s*s);      // curvature (sign flips along span)
+  const ymid = (NY-1)/2;
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    const amp = base.beamH * (0.8 + 0.35*Math.sin(t*0.5));   // gentle breathing sag
+    const def = [];
+    for (let j=0;j<NY;j++){
+      const row = [];
+      for (let i=0;i<NX;i++){
+        const s = i/(NX-1);
+        const ripple = 0.05*Math.sin(s*Math.PI*3 - t*0.9)*shape(s);
+        const v = amp*(shape(s) + ripple);
+        row.push({ x: base[j][i].x, y: base[j][i].y + v });
+      }
+      def.push(row);
+    }
+
+    // fill cells by stress proxy = curvature * fibre distance
+    for (let j=0;j<NY-1;j++){
+      for (let i=0;i<NX-1;i++){
+        const s = (i+0.5)/(NX-1);
+        const fibre = ((j+0.5) - ymid)/ymid;        // +1 bottom, -1 top
+        const stress = shape2(s)*fibre/32;          // ~[-1,1]
+        ctx.fillStyle = viridis(0.5 + 0.5*stress);
+        ctx.beginPath();
+        ctx.moveTo(def[j][i].x,   def[j][i].y);
+        ctx.lineTo(def[j][i+1].x, def[j][i+1].y);
+        ctx.lineTo(def[j+1][i+1].x, def[j+1][i+1].y);
+        ctx.lineTo(def[j+1][i].x, def[j+1][i].y);
+        ctx.closePath();
+        ctx.globalAlpha = 0.9;
+        ctx.fill();
+      }
+    }
+    // wireframe
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(8,12,20,.55)';
+    ctx.lineWidth = 0.6;
+    for (let j=0;j<NY;j++){ ctx.beginPath(); for (let i=0;i<NX;i++){ const p=def[j][i]; i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);} ctx.stroke(); }
+    for (let i=0;i<NX;i++){ ctx.beginPath(); for (let j=0;j<NY;j++){ const p=def[j][i]; j?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);} ctx.stroke(); }
+
+    // faint undeformed outline + fixed supports
+    ctx.strokeStyle = 'rgba(154,164,186,.22)';
+    ctx.setLineDash([3,3]); ctx.lineWidth = 1;
+    const tl=base[0][0], tr=base[0][NX-1], bl=base[NY-1][0], br=base[NY-1][NX-1];
+    ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y); ctx.closePath(); ctx.stroke();
+    ctx.setLineDash([]);
+    // clamped supports — fixed hatched edges at both ends (undeformed x)
+    ctx.strokeStyle = 'rgba(45,212,191,.5)'; ctx.lineWidth = 1;
+    [0, NX-1].forEach(ci => {
+      const top = base[0][ci], bot = base[NY-1][ci], dir = ci === 0 ? -1 : 1;
+      ctx.beginPath(); ctx.moveTo(top.x, top.y-4); ctx.lineTo(bot.x, bot.y+4); ctx.stroke();
+      const n = 6;
+      for (let k=0;k<=n;k++){
+        const yy = top.y + (bot.y-top.y)*k/n;
+        ctx.beginPath(); ctx.moveTo(top.x, yy); ctx.lineTo(top.x + dir*6, yy+5); ctx.stroke();
+      }
+    });
+  }
+
+  function loop(){ t += 0.016; frame(); requestAnimationFrame(loop); }
+
+  layout();
+  addEventListener('resize', layout, {passive:true});
+  if (reduce){ t = 1.4; frame(); } else { loop(); }
+})();
+</script>
+</body>
+</html>
